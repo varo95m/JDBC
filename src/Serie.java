@@ -11,6 +11,12 @@ public class Serie {
 		this.descrpcion = descrpcion;
 		this.idGenero = idGenero;
 	}
+	
+	public Serie(String nombre) {
+		super();
+		this.nombre = nombre;
+	}
+
 	public int getIdSerie() {
 		return idSerie;
 	}

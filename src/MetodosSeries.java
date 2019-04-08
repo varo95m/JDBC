@@ -2,12 +2,14 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MetodosSeries {
 	Connection con = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	String propiedades = "D:\\Programacion\\JDBC\\src\\propiedades.xml";
+	String propiedades = "src/propiedades.xml";
 	ConexionBD conexion = new ConexionBD(propiedades);
 	Serie serie = null;
 	public Serie obtenerSerie(int idSerie) {
@@ -35,7 +37,7 @@ public class MetodosSeries {
 	public Serie crearSerie(String nombre, String descripcion, int IDGenero) {
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD("/datos/usuarios/alumnos/alvaro.monterocarmena/Escritorio/Programacion/JDBC/src/propiedades.xml");
+			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -67,6 +69,71 @@ public class MetodosSeries {
 			liberarRecursos();
 		}
 		return true;
+	}
+	
+	public int obtenerNumeroDeSeries() {
+		int contador = 0;
+		try {
+			// Realizamos la conexion
+			ConexionBD conexion = new ConexionBD(propiedades);
+			con = conexion.getConnection();
+			// Creación de la sentencia
+			stmt = con.createStatement();
+			// Ejecución de la consulta
+			rs = stmt.executeQuery("SELECT IDSerie FROM Series");
+			while(rs.next()) {
+				contador++;
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} finally {
+			liberarRecursos();
+		}
+		return contador;
+	}
+	
+	public List <Serie> buscarSeriesPorNombre (String nombre, int count){
+		List<Serie> nombreSeries = new ArrayList<Serie>();
+		try {
+			// Realizamos la conexion
+			ConexionBD conexion = new ConexionBD(propiedades);
+			con = conexion.getConnection();
+			// Creación de la sentencia
+			stmt = con.createStatement();
+			// Ejecución de la consulta
+			rs = stmt.executeQuery("SELECT Nombre FROM Series WHERE Nombre LIKE '%"+nombre+"%' LIMIT " + count);
+			while(rs.next()) {
+				serie = new Serie(rs.getString(1));
+				nombreSeries.add(serie);
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} finally {
+			liberarRecursos();
+		}
+		return nombreSeries;
+	}
+	
+	public List <Serie> obtenerSeriesPorGenero (double idGenero, int index, int count){
+		List<Serie> nombreSeries = new ArrayList<Serie>();
+		try {
+			// Realizamos la conexion
+			ConexionBD conexion = new ConexionBD(propiedades);
+			con = conexion.getConnection();
+			// Creación de la sentencia
+			stmt = con.createStatement();
+			// Ejecución de la consulta
+			rs = stmt.executeQuery("SELECT Nombre FROM Series WHERE idGenero = "+idGenero+" LIMIT " + index + "," + count);
+			while(rs.next()) {
+				serie = new Serie(rs.getString(1));
+				nombreSeries.add(serie);
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} finally {
+			liberarRecursos();
+		}
+		return nombreSeries;
 	}
 
 	public void liberarRecursos() {
