@@ -15,14 +15,16 @@ public class Main {
 			opcionUno = teclado.nextInt();
 			if(opcionUno==1) {
 				while(opcionDos!=10) {
-					System.out.println("Que desea hacer: \n 1. Obtener serie mediante id. \n 2. Crear serie.\n 2. Borrar serie. \n 10. Volver");
+					System.out.println("Que desea hacer: \n 1. Obtener serie mediante id. \n 2. Crear serie.\n 3. Borrar serie. \n 10. Volver");
 					opcionDos=teclado.nextInt();
 					switch (opcionDos) {
 					case 1:
 						System.out.print("Introduzca id de la serie: ");
 						idSerie = teclado.nextInt();
 						serie = series.obtenerSerie(idSerie);
-						System.out.println(serie.toString());
+						if(serie!=null) {
+							System.out.println(serie.toString());
+						}
 						break;
 					case 2:
 						System.out.println("Introduzca nombre: ");
@@ -35,7 +37,9 @@ public class Main {
 						serie = series.crearSerie(nombre, descripcion, idGenero);
 						System.out.println(serie.toString());
 					case 3:
-						
+						System.out.print("Introduzca id de la serie: ");
+						idSerie = teclado.nextInt();
+						System.out.println(series.borrarSerie(idSerie));
 					default:
 						break;
 					}

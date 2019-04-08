@@ -38,7 +38,7 @@ public class Serie {
 	@Override
 	public String toString() {
 		return "ID=" + idSerie + " NOMBRE=" + nombre + " DESCRIPCION=" + descrpcion + " IDGENERO="
-				+ idGenero + "]";
+				+ idGenero;
 	}
 	
 }

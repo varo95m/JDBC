@@ -7,12 +7,13 @@ public class MetodosSeries {
 	Connection con = null;
 	Statement stmt = null;
 	ResultSet rs = null;
-	ConexionBD conexion = new ConexionBD("/datos/usuarios/alumnos/alvaro.monterocarmena/Escritorio/Programacion/JDBC/src/propiedades.xml");
+	String propiedades = "D:\\Programacion\\JDBC\\src\\propiedades.xml";
+	ConexionBD conexion = new ConexionBD(propiedades);
 	Serie serie = null;
 	public Serie obtenerSerie(int idSerie) {
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD("/datos/usuarios/alumnos/alvaro.monterocarmena/Escritorio/Programacion/JDBC/src/propiedades.xml");
+			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -54,12 +55,12 @@ public class MetodosSeries {
 	public boolean borrarSerie(int idSerie) {
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD("/datos/usuarios/alumnos/alvaro.monterocarmena/Escritorio/Programacion/JDBC/src/propiedades.xml");
+			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
 			// Ejecución de la consulta
-			stmt.executeQuery("DELETE FROM Series WHERE IDSerie = " + idSerie);
+			stmt.executeQuery("DELETE FROM series WHERE IDSerie="+ idSerie);
 		} catch (SQLException sqle) {
 			return false;
 		} finally {
