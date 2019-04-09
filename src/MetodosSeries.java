@@ -17,7 +17,6 @@ public class MetodosSeries {
 	public Serie obtenerSerie(int idSerie) {
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -40,7 +39,6 @@ public class MetodosSeries {
 		List<Serie> nombreSeries = new ArrayList<Serie>();
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -61,7 +59,6 @@ public class MetodosSeries {
 	public Serie crearSerie(String nombre, String descripcion, int IDGenero) {
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -81,7 +78,6 @@ public class MetodosSeries {
 	public boolean eliminarSerie(int idSerie) {
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -99,7 +95,6 @@ public class MetodosSeries {
 		int contador = 0;
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -120,7 +115,6 @@ public class MetodosSeries {
 		List<Serie> nombreSeries = new ArrayList<Serie>();
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -142,7 +136,6 @@ public class MetodosSeries {
 		List<Serie> nombreSeries = new ArrayList<Serie>();
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -164,7 +157,6 @@ public class MetodosSeries {
 		List<Serie> nombreSeries = new ArrayList<Serie>();
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			// Creación de la sentencia
 			stmt = con.createStatement();
@@ -190,7 +182,6 @@ public class MetodosSeries {
 		int idGenero;
 		try {
 			// Realizamos la conexion
-			ConexionBD conexion = new ConexionBD(propiedades);
 			con = conexion.getConnection();
 			System.out.println("Introduzca nuevo nombre: ");
 			nombre = teclado.nextLine();
