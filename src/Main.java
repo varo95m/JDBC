@@ -9,11 +9,14 @@ public class Main {
 	public static void main(String[] args) throws FileNotFoundException, InvalidPropertiesFormatException, IOException {
 		int opcionUno=0, opcionDos=0, idSerie, idGenero, cantidad, index;
 		String opcion, nombre, descripcion;
-		MetodosSeries series = new MetodosSeries();
+		SerieJDBC series = new SerieJDBC();
 		@SuppressWarnings("resource")
 		Scanner teclado = new Scanner(System.in);
 		Serie serie, serieEditada;
+		GeneroJDBC gen = new GeneroJDBC();
+		Genero genero = new Genero();
 		List<Serie> numeroSeries = new ArrayList<Serie>();
+		List<Genero> generos = new ArrayList<Genero>();
 		while(opcionUno!=3) {
 			System.out.println("Con que desea trabajar:\n 1. Series.\n 2. Generos.\n 3. Salir.");
 			opcionUno = teclado.nextInt();
@@ -64,9 +67,12 @@ public class Main {
 						break;
 					case 6:
 						index = 0;
-						System.out.println("Introduzca genero: ");
-						idGenero = teclado.nextInt();
-						numeroSeries = series.obtenerSeriesPorGenero(idGenero, index, 5);
+						System.out.println("Introduzca nombre del genero: ");
+						teclado.nextLine();
+						String nombreGenero = teclado.nextLine();
+						genero = gen.obtenerGeneroPorNombre(nombreGenero);
+						if(genero != null) {
+						numeroSeries = series.obtenerSeriesPorGenero(genero.getIdGenero(), index, 5);
 						for(int i = 0; i<numeroSeries.size(); i++) {
 							System.out.println(numeroSeries.get(i).getNombre());
 						}
@@ -78,13 +84,13 @@ public class Main {
 								if(index!=0) {
 									index-=5;
 								}
-								numeroSeries = series.obtenerSeriesPorGenero(idGenero, index, 5);
+								numeroSeries = series.obtenerSeriesPorGenero(genero.getIdGenero(), index, 5);
 								for(int i = 0; i<numeroSeries.size(); i++) {
 									System.out.println(numeroSeries.get(i).getNombre());
 								}
 							}else if(opcion.equals("d")) {
 								index+=5;
-								numeroSeries = series.obtenerSeriesPorGenero(idGenero, index, 5);
+								numeroSeries = series.obtenerSeriesPorGenero(genero.getIdGenero(), index, 5);
 								for(int i = 0; i<numeroSeries.size(); i++) {
 									System.out.println(numeroSeries.get(i).getNombre());
 								}
@@ -93,6 +99,7 @@ public class Main {
 							}
 							System.out.println("Introduzca a(anterior) d(siguiente) s(salir) ");
 							opcion = teclado.nextLine();
+						}
 						}
 						break;
 					case 7:
@@ -143,7 +150,55 @@ public class Main {
 						break;
 					}
 				}
+			}else if(opcionUno==2) {
+				while(opcionDos!=10) {
+					System.out.println("Que desea hacer: \n 1. Obtener genero mediante. \n 2. Obtener todos los generos. \n 3. Crear genero. \n 4. Borrar genero. \n 5. Editar genero. \n ID 10. Volver");
+					opcionDos=teclado.nextInt();
+					switch (opcionDos) {
+					case 1:
+						System.out.print("Introduzca id del genero: ");
+						idGenero = teclado.nextInt();
+						genero = gen.obtenerGenero(idGenero);
+						if(genero!=null) {
+							System.out.println(genero.toString());
+						}
+						break;
+					case 2:
+						generos = gen.obtenerGeneros();
+						for(int i = 0; i<generos.size(); i++) {
+							System.out.println(generos.get(i).getNombreGenero());
+						}
+						break;
+					case 3:
+						System.out.println("Introduzca nombre: ");
+						teclado.nextLine();
+						nombre = teclado.nextLine();
+						System.out.println("Introduzca descripcion: ");
+						descripcion = teclado.nextLine();
+						genero = gen.crearGenero(nombre, descripcion);
+						System.out.println(genero.toString());
+						break;
+					case 4:
+						System.out.println("Introduzca id del genero que quieres borrar: ");
+						idGenero = teclado.nextInt();
+						System.out.println(gen.eliminarGenero(idGenero));
+						break;
+					case 5:
+						System.out.println("Introduzca id del genero que quieres modificar: ");
+						idGenero = teclado.nextInt();
+						genero = gen.obtenerGenero(idGenero);
+						if(genero != null){
+							genero = gen.editarGenero(genero);
+							System.out.println(genero.toString());
+						}
+						break;
+					default:
+						break;
+					}
+				}
 			}
 		}
 	}
 }
+
+

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class MetodosSeries {
+public class SerieJDBC {
 	Connection con = null;
 	Statement stmt = null;
 	ResultSet rs = null;
@@ -82,7 +82,7 @@ public class MetodosSeries {
 			// Creación de la sentencia
 			stmt = con.createStatement();
 			// Ejecución de la consulta
-			stmt.executeQuery("DELETE FROM series WHERE IDSerie="+ idSerie);
+			stmt.executeUpdate("DELETE FROM series WHERE IDSerie="+ idSerie);
 		} catch (SQLException sqle) {
 			return false;
 		} finally {
@@ -153,7 +153,7 @@ public class MetodosSeries {
 		return nombreSeries;
 	}
 
-	public List <Serie> obtenerSeriesPorGenero (double idGenero, int index, int count){
+	public List <Serie> obtenerSeriesPorGenero (int idGenero, int index, int count){
 		List<Serie> nombreSeries = new ArrayList<Serie>();
 		try {
 			// Realizamos la conexion
@@ -192,7 +192,7 @@ public class MetodosSeries {
 			// Creación de la sentencia
 			stmt = con.createStatement();
 			// Ejecución de la consulta
-			stmt.execute("UPDATE Series SET Nombre='"+nombre+"', Descripcion='"+descripcion+"', IDGenero="+idGenero +" WHERE IDSerie="+serie.getIdSerie());
+			stmt.executeUpdate("UPDATE Series SET Nombre='"+nombre+"', Descripcion='"+descripcion+"', IDGenero="+idGenero +" WHERE IDSerie="+serie.getIdSerie());
 			serieEditada = obtenerSerie(serie.getIdSerie());
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
