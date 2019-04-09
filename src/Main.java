@@ -7,11 +7,12 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) throws FileNotFoundException, InvalidPropertiesFormatException, IOException {
-		int opcionUno=0, opcionDos=0, idSerie, idGenero, cantidad, contadorPaginacion = 0;
+		int opcionUno=0, opcionDos=0, idSerie, idGenero, cantidad, index;
 		String opcion, nombre, descripcion;
 		MetodosSeries series = new MetodosSeries();
+		@SuppressWarnings("resource")
 		Scanner teclado = new Scanner(System.in);
-		Serie serie;
+		Serie serie, serieEditada;
 		List<Serie> numeroSeries = new ArrayList<Serie>();
 		while(opcionUno!=3) {
 			System.out.println("Con que desea trabajar:\n 1. Series.\n 2. Generos.\n 3. Salir.");
@@ -19,7 +20,8 @@ public class Main {
 			if(opcionUno==1) {
 				while(opcionDos!=10) {
 					System.out.println("Que desea hacer: \n 1. Obtener serie mediante id. \n 2. Crear serie.\n 3. Borrar serie.\n "
-							+ "4. Mostrar total series.\n 5. Mostrar series por nombre.\n 6. Mostrar series por genero. \n 10. Volver");
+							+ "4. Mostrar total series.\n 5. Mostrar series por nombre.\n 6. Mostrar series por genero."
+							+ "\n 7. Mostrar catálogo de series. \n 10. Volver");
 					opcionDos=teclado.nextInt();
 					switch (opcionDos) {
 					case 1:
@@ -44,7 +46,7 @@ public class Main {
 					case 3:
 						System.out.print("Introduzca id de la serie: ");
 						idSerie = teclado.nextInt();
-						System.out.println(series.borrarSerie(idSerie));
+						System.out.println(series.eliminarSerie(idSerie));
 						break;
 					case 4:
 						System.out.println("Numero de series en la base de datos: " + series.obtenerNumeroDeSeries());
@@ -61,7 +63,7 @@ public class Main {
 						}
 						break;
 					case 6:
-						int index = 0;
+						index = 0;
 						System.out.println("Introduzca genero: ");
 						idGenero = teclado.nextInt();
 						numeroSeries = series.obtenerSeriesPorGenero(idGenero, index, 5);
@@ -89,9 +91,53 @@ public class Main {
 							}else {
 								System.out.println("No es una opcion valida");
 							}
-							System.out.println("Introduzca opcion");
+							System.out.println("Introduzca a(anterior) d(siguiente) s(salir) ");
 							opcion = teclado.nextLine();
 						}
+						break;
+					case 7:
+						index = 0;
+						System.out.println("Introduzca cantidad de series por pagina: ");
+						cantidad = teclado.nextInt();
+						numeroSeries = series.obtenerCatalogoSeries(index, cantidad);
+						for(int i = 0; i<numeroSeries.size(); i++) {
+							System.out.println(numeroSeries.get(i).getNombre());
+						}
+						System.out.println("Introduzca a(anterior) d(siguiente) s(salir) ");
+						teclado.nextLine();
+						opcion = teclado.nextLine();
+						while(!opcion.equals("s")) {
+							if (opcion.equals("a")) {
+								if(index!=0) {
+									index-=cantidad;
+								}
+								numeroSeries = series.obtenerCatalogoSeries(index, cantidad);
+								for(int i = 0; i<numeroSeries.size(); i++) {
+									System.out.println(numeroSeries.get(i).getNombre());
+								}
+							}else if(opcion.equals("d")) {
+								index+=cantidad;
+								numeroSeries = series.obtenerCatalogoSeries(index, cantidad);
+								for(int i = 0; i<numeroSeries.size(); i++) {
+									System.out.println(numeroSeries.get(i).getNombre());
+								}
+							}else {
+								System.out.println("No es una opcion valida");
+							}
+							System.out.println("Introduzca a(anterior) d(siguiente) s(salir) ");
+							opcion = teclado.nextLine();
+						}
+						break;
+					case 8:
+						numeroSeries = series.obtenerSeries();
+						for(int i = 0; i<numeroSeries.size(); i++) {
+							System.out.println(numeroSeries.get(i).toString());
+						}
+						System.out.println("Introduzca id de la serie a editar: ");
+						idSerie = teclado.nextInt();
+						serie = series.obtenerSerie(idSerie);
+						serieEditada = series.editarSerie(serie);
+						System.out.println(serieEditada.toString());
 						break;
 					default:
 						break;

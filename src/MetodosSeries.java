@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class MetodosSeries {
 	Connection con = null;
@@ -12,6 +13,7 @@ public class MetodosSeries {
 	String propiedades = "src/propiedades.xml";
 	ConexionBD conexion = new ConexionBD(propiedades);
 	Serie serie = null;
+	
 	public Serie obtenerSerie(int idSerie) {
 		try {
 			// Realizamos la conexion
@@ -33,7 +35,29 @@ public class MetodosSeries {
 		}
 		return serie;
 	}
-
+	
+	public List<Serie> obtenerSeries() {
+		List<Serie> nombreSeries = new ArrayList<Serie>();
+		try {
+			// Realizamos la conexion
+			ConexionBD conexion = new ConexionBD(propiedades);
+			con = conexion.getConnection();
+			// Creación de la sentencia
+			stmt = con.createStatement();
+			// Ejecución de la consulta y obtención de resultados en un
+			rs = stmt.executeQuery("SELECT IDSerie, Nombre, Descripcion, IDGenero FROM Series");
+			while(rs.next()) {
+				serie = new Serie(rs.getInt(1),rs.getString(2), rs.getString(3), rs.getInt(4));
+				nombreSeries.add(serie);
+			}
+		} catch (SQLException sqle) {
+			System.err.println(sqle.getMessage());
+		} finally {
+			liberarRecursos();
+		}
+		return nombreSeries;
+	}
+	
 	public Serie crearSerie(String nombre, String descripcion, int IDGenero) {
 		try {
 			// Realizamos la conexion
@@ -53,8 +77,8 @@ public class MetodosSeries {
 		}
 		return serie;
 	}
-	
-	public boolean borrarSerie(int idSerie) {
+
+	public boolean eliminarSerie(int idSerie) {
 		try {
 			// Realizamos la conexion
 			ConexionBD conexion = new ConexionBD(propiedades);
@@ -70,7 +94,7 @@ public class MetodosSeries {
 		}
 		return true;
 	}
-	
+
 	public int obtenerNumeroDeSeries() {
 		int contador = 0;
 		try {
@@ -91,7 +115,29 @@ public class MetodosSeries {
 		}
 		return contador;
 	}
-	
+
+	public List <Serie> obtenerCatalogoSeries (int index, int count){
+		List<Serie> nombreSeries = new ArrayList<Serie>();
+		try {
+			// Realizamos la conexion
+			ConexionBD conexion = new ConexionBD(propiedades);
+			con = conexion.getConnection();
+			// Creación de la sentencia
+			stmt = con.createStatement();
+			// Ejecución de la consulta
+			rs = stmt.executeQuery("SELECT Nombre FROM Series LIMIT " + index + "," + count);
+			while(rs.next()) {
+				serie = new Serie(rs.getString(1));
+				nombreSeries.add(serie);
+			}
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} finally {
+			liberarRecursos();
+		}
+		return nombreSeries;
+	}
+
 	public List <Serie> buscarSeriesPorNombre (String nombre, int count){
 		List<Serie> nombreSeries = new ArrayList<Serie>();
 		try {
@@ -113,7 +159,7 @@ public class MetodosSeries {
 		}
 		return nombreSeries;
 	}
-	
+
 	public List <Serie> obtenerSeriesPorGenero (double idGenero, int index, int count){
 		List<Serie> nombreSeries = new ArrayList<Serie>();
 		try {
@@ -136,6 +182,35 @@ public class MetodosSeries {
 		return nombreSeries;
 	}
 
+	public Serie editarSerie (Serie serie) {
+		Serie serieEditada = null;
+		@SuppressWarnings("resource")
+		Scanner teclado = new Scanner(System.in);
+		String nombre, descripcion;
+		int idGenero;
+		try {
+			// Realizamos la conexion
+			ConexionBD conexion = new ConexionBD(propiedades);
+			con = conexion.getConnection();
+			System.out.println("Introduzca nuevo nombre: ");
+			nombre = teclado.nextLine();
+			System.out.println("Introduzca nueva descripcion: ");
+			descripcion = teclado.nextLine();
+			System.out.println("Introduzca nuevo Genero");
+			idGenero = teclado.nextInt();
+			// Creación de la sentencia
+			stmt = con.createStatement();
+			// Ejecución de la consulta
+			stmt.execute("UPDATE Series SET Nombre='"+nombre+"', Descripcion='"+descripcion+"', IDGenero="+idGenero +" WHERE IDSerie="+serie.getIdSerie());
+			serieEditada = obtenerSerie(serie.getIdSerie());
+		} catch (SQLException sqle) {
+			sqle.printStackTrace();
+		} finally {
+			liberarRecursos();
+		}
+		return serieEditada;
+	}
+	
 	public void liberarRecursos() {
 		try {
 			// Liberamos todos los recursos pase lo que pase
